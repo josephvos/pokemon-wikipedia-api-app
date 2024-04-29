@@ -8,110 +8,94 @@ import cs1302.api.PokemonDataTypeHigh;
 
 
 /**
- * Represents a result in a response from the iTunes Search API. This is
- * used by Gson to create an object from the JSON response body. This class
- * is provided with project's starter code, and the instance variables are
- * intentionally set to package private visibility.
- * @see <a href="https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/UnderstandingSearchResults.html#//apple_ref/doc/uid/TP40017632-CH8-SW1">Understanding Search Results</a>
+   Contains all the data from the pages. Also contains images
+   which contains all of the other specific data from the website.
  */
 public class WikipediaPages {
 
-    //  String title;
-    // List<WikipediaData> images;
-    //  int ns;
-/*
-    private Query query;
-    public Query getQuery() {
-        return query;
 
-    }
-    public void setQuery(Query quer) {
-        this.query = query;
-    }
-*/
 
     private int pageid;
     private int ns;
     private String title;
     private List<WikipediaImages> images;
 
+
+    /**
+       Gets the pageid from Wikipedia.
+       @return pageid the page id
+    */
+
     public int getPageid() {
-            return pageid;
-        }
-
-        public void setPageid(int pageid) {
-            this.pageid = pageid;
-        }
-
-        public int getNs() {
-            return ns;
-        }
-
-        public void setNs(int ns) {
-            this.ns = ns;
-        }
-
-        public String getTitle() {
-            return title;
-        }
-
-        public void setTitle(String title) {
-            this.title = title;
-        }
-
-        public List<WikipediaImages> getImages() {
-            return images;
-        }
-
-        public void setImages(List<WikipediaImages> images) {
-            this.images = images;
-        }
-
-
-    //   public String getTitle() {
-    //      return title;
-    //   }
-    //   public void setTitle(String title) {
-        //        this.title = title;
-          //   return title;
-    //  }
-
-/*
-    public String getName() {
-        return name;
+        return pageid;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    /**
+       Sets the pageid.
+       @param pageid the pageid from the website
+    */
+
+    public void setPageid(int pageid) {
+        this.pageid = pageid;
     }
 
-    public String getUrl() {
-        return url;
+    /**
+       Gets the namespace from Wikipedia.
+       @return ns the namespace
+    */
 
+    public int getNs() {
+        return ns;
     }
-    public void setUrl(String url) {
-        this.url = url;
+
+    /**
+       Sets the namespace on Wikipedia.
+       @param ns the namespace
+    */
+
+    public void setNs(int ns) {
+        this.ns = ns;
     }
 
-   @Override
-       public String toString() {
-        //  String result = "toString PType.java: ";
-       //  for (PokemonType type : types) {
-       //  result += types.getName();
-         String result = name;
-         //  }
-          return result;
-          //  return name;
-       }
-*/
+    /**
+       Gets the title of the page.
+       @return title the title of the page.
+    */
+
+    public String getTitle() {
+        return title;
+    }
+
+    /**
+       Sets the title of the page.
+       @param title is the title of the page.
+    */
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    /**
+       Gets a list of images from the page.
+       @return images a list of images from the page.
+    */
+
+    public List<WikipediaImages> getImages() {
+        return images;
+    }
+
+    /**
+       Sets the images in the list of images from the page.
+       @param images the images from Wikipedia.
+    */
+
+    public void setImages(List<WikipediaImages> images) {
+        this.images = images;
+    }
 
 
 
-    //  public List<PokemonType> getTypes() {
-    //      return types;
-    //   }
 
 
 
-
-} // ItunesResult
+}

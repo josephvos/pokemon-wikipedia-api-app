@@ -8,58 +8,62 @@ import cs1302.api.PokemonDataTypeHigh;
 
 
 /**
- * Represents a result in a response from the iTunes Search API. This is
- * used by Gson to create an object from the JSON response body. This class
- * is provided with project's starter code, and the instance variables are
- * intentionally set to package private visibility.
- * @see <a href="https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/UnderstandingSearchResults.html#//apple_ref/doc/uid/TP40017632-CH8-SW1">Understanding Search Results</a>
+   The lowest level in the PokeAPI classes. This contains the direct
+   name and url of the type data. This is enclosed inside the type data.
  */
 public class PokemonType {
 
     private String name;
     private String url;
-    //  List<PokemonType> types;
 
-//    int slot;
-/*
-    public PokemonType(String name, String url) {
-        this.name = name;
-        this.url = url;
-    }
-*/
+    /**
+       Gets the name of the type.
+       @return name the name of the type
+     */
     public String getName() {
         return name;
     }
+
+    /**
+       Sets the name of the type.
+       @param name the name of the type.
+    */
 
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+       Gets the url of the type.
+       @return the url of the type.
+    */
+
     public String getUrl() {
         return url;
     }
+
+    /**
+       Sets the url of the type.
+       @param url the url of the type.
+    */
+
     public void setUrl(String url) {
         this.url = url;
     }
 
-   @Override
+    /**
+      A to string method to return the actual
+      name of the type instead of a bunch
+      of unreadable data.
+
+       @return result the name of the tpye
+    */
+
+    @Override
        public String toString() {
-        //  String result = "toString PType.java: ";
-       //  for (PokemonType type : types) {
-       //  result += types.getName();
-         String result = name;
-         //  }
-          return result;
-          //  return name;
-       }
+        String result = name;
+        return result;
+    }
 
 
-
-    //  public List<PokemonType> getTypes() {
-    //      return types;
-    //   }
-
-
-
-
-} // ItunesResult
+}

@@ -1,4 +1,3 @@
-
 package cs1302.api;
 
 import java.net.http.HttpClient;
@@ -13,41 +12,23 @@ import com.google.gson.GsonBuilder;
 import java.io.InputStream;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import java.time.LocalTime;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
 import java.io.IOException;
-import java.net.URL;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.text.Text;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.ComboBox;
 import java.net.http.HttpRequest;
 import java.net.URI;
 import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import cs1302.api.ApiDriver;
-import cs1302.api.ItunesResponse;
-import cs1302.api.ItunesResult;
 import java.util.List;
 import java.util.ArrayList;
 import javafx.scene.layout.TilePane;
-import java.util.Random;
-import javafx.animation.Timeline;
-import javafx.animation.KeyFrame;
-import javafx.animation.Animation;
-import javafx.util.Duration;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import cs1302.api.PokemonTypeData;
 import cs1302.api.PokemonType;
 import cs1302.api.PokemonDataTypeHigh;
@@ -55,18 +36,19 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
- * REPLACE WITH NON-SHOUTING DESCRIPTION OF YOUR APP.
+ * Uses the PokeAPI to accept a user input of a pokemon name and then, using the types
+ from the pokemon, searches Wikipedia to pull an image of where the pokemon would
+ live if it existed in real life.
  */
 public class ApiApp extends Application {
 
-    //  @Autowired
-    // private PokeApiClient pokeApiClient;
     Stage stage;
     Scene scene;
     HBox root;
-    List<PokemonType> types;
+    List<PokemonType> types; // creates a ton of variables and some new http
+    // clients. I know that it said we didn't have to do this but I made a bunch
+    // and it was already too late.
 
-    private static final String DEFAULT_IMG = "https://cdn.vox-cdn.com/thumbor/Ufs9bpCoZtCKAlBcaqyxfpaSllc=/0x0:1920x1080/1320x528/filters:focal(807x387:1113x693):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/53262569/who_pokemon.0.jpg";
     /** HTTP client. */
     public static final HttpClient HTTP_WIKI2 = HttpClient.newBuilder()
         .version(HttpClient.Version.HTTP_2)
@@ -96,46 +78,21 @@ public class ApiApp extends Application {
         .setPrettyPrinting()
         .create();
 
-    // Tons of variables
-    //  private static Stage stage;
-    private Timeline timeline;
-    //  private Scene scene;
-    //  private HBox root;
     HBox urlLayer;
     TextField url;
-    static Button getImageButton;
-    static Button playButton;
+    static Button pokePicker;
     HBox botHBox;
     HBox superBot;
     HBox textBot;
     ImageView imgView;
     VBox bigBox;
     Text upperText = new Text("Search:");
-    ProgressBar loading;
     static Text changeText = new Text();
     Text bottomText = new Text("Images provided by iTunes Search API.");
-    ComboBox<String> dropDown = new ComboBox<>();
     TilePane manyImages;
     HBox bot2Hbox;
-    Image brownPic;
-    int artworkLength2 = 0;
-    Random random;
-    int artworkLength = 0;
-    boolean computerUsage = false;
-    private TilePane newManyImages;
-    List<String> artworkUrls2 = new ArrayList<String>();
-    List<Image> imageUrls2 = new ArrayList<Image>();
-    List<String> artworkUrls = new ArrayList<String>();
-    List<Image> imageUrls = new ArrayList<Image>();
-    static String dropDownThing;
     static String userInput;
-    // ItunesResponse response;
-    int artworkLengthTemp = -1;
-    String imageUrl;
-    private double progress = 0.0;
     static String body;
-    static int repeated = 0;
-    boolean timeLineYes = false;
     static List<String> convertList = new ArrayList<String>();
     String printableList;
     int tempCount = 0;
@@ -148,43 +105,24 @@ public class ApiApp extends Application {
     static Text bottomChangeText = new Text();
     static Text botTextEnd = new Text();
 
-
-
-
-
     /**
      * Constructs an {@code ApiApp} object. This default (i.e., no argument)
      * constructor is executed in Step 2 of the JavaFX Application Life-Cycle.
      */
     public ApiApp() {
-        //      root = new VBox();
-        //  } // ApiApp
-
         this.stage = null;
         this.scene = null; // Initializes a bunch of stuff.
-        this.root = new HBox(15);
-        loading = new ProgressBar(0); // Not really hard to understand what these all do.
+        this.root = new HBox(15); // Not really hard to understand what these all do.
         bigBox = new VBox();
         superBot = new HBox();
         imgView = new ImageView();
         textBot = new HBox();
-        url = new TextField("Tornadus-therian");
-
+        url = new TextField("Charmander");
         botHBox = new HBox();
-        loading.setPrefWidth(235);
         bot2Hbox = new HBox(3);
-        dropDown.getItems().addAll(
-            "movie", "podcast", "music", "musicVideo", "audiobook",
-            "shortFilm", "tvShow", "software", "ebook", "all");
-        dropDown.setValue("music");
         manyImages = new TilePane();
-        getImageButton = new Button("Pokemon Pick");
-        playButton = new Button("Play");
+        pokePicker = new Button("Pokemon Pick");
         urlLayer = new HBox();
-        newManyImages = new TilePane();
-        newManyImages.setPrefRows(1);
-        newManyImages.setPrefColumns(2);
-        playButton.setDisable(true);
         botTextEnd.setText("Waiting for input...\n");
         changeText.setText("Type In The Name Of A Pokemon" +
             " And I'll Tell You Where To Find It!");
@@ -193,36 +131,30 @@ public class ApiApp extends Application {
         bottomChangeText.setFont(Font.font("TimesRoman", 10));
         botTextEnd.setFont(Font.font("TimesRoman", 10));
 
-    } // GalleryApp
+    }
     /** {@inheritDoc}
      *
-     *  Creates the boxes and initializes some blank spots.
-        Also has the calls for the button methods.
+     *  Creates the hboxes and vboxes and initializes a blank spot for images.
+     Also has the call for the Image Button Click
      */
 
     @Override
     public void init() {
         System.out.println("init() called");
         for (int i = 0; i < 1; i++) {
-            brownPic = new Image(DEFAULT_IMG);
-            // Sets the images to be default
-            // images at first
-            ImageView imageView = new ImageView(brownPic);
+            ImageView imageView = new ImageView();
             imageView.setFitWidth(175); // adds the sizes
             imageView.setFitHeight(320);
             manyImages.getChildren().add(imageView);
         }
         // A bunch of things that add all of the hboxs to vboxes to make the pop up look right
-        root.getChildren().addAll(upperText, urlLayer, getImageButton);
+        root.getChildren().addAll(upperText, urlLayer, pokePicker);
         botHBox.getChildren().addAll(manyImages);
         textBot.getChildren().addAll(botTextEnd);
         superBot.getChildren().addAll(bottomChangeText);
-        //  bot2Hbox.getChildren().addAll(loading);
         urlLayer.getChildren().addAll(url);
         bigBox.getChildren().addAll(root, changeText, botHBox, textBot, superBot);
-        // the methods for the buttons
-        getImageButtonAction();
-        //   getPlayPauseAction();
+        pokeButton();
     } // init
 
 
@@ -235,9 +167,8 @@ public class ApiApp extends Application {
     @Override
     public void start(Stage stage) {
         this.stage = stage; // sets the stage along with sizing
-        this.scene = new Scene(bigBox, 360, 392); // this code was provided to us
+        this.scene = new Scene(bigBox, 360, 392); // Had problems with sizing so manually input it
         this.stage.setOnCloseRequest(event -> Platform.exit());
-
         this.stage.setTitle("PokemonFinder!");
         this.stage.setScene(this.scene);
         this.stage.sizeToScene();
@@ -256,14 +187,13 @@ Stops the JavaFX.
 
      /**
 
-       Sees if the data that is attempted to be received from iTunes
-       is valid and then returns a string representing that if it's
-       valid.
+      Sees if the Pokemon name the user input is valid and if so
+      searches the PokeAPI for data about the Pokemon.
 
        Dr. Coterell showed us the majority of this code in class.
 
-       @param url is the url that the user tries to retrieve from iTunes.
-       @return the body received from iTunes.
+       @param url is the url that the user tries to retrieve from PokeAPI.
+       @return the body received from pokeAPI
        @throw an IOException if the body is bad
 
     */
@@ -274,44 +204,48 @@ Stops the JavaFX.
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                     .build();
-
             HttpResponse<String> response
                 = HTTP_CLIENT.send(request, HttpResponse.BodyHandlers.ofString());
-
             if (response.statusCode() == 200) {
-                //  return response.body();
                 body = response.body().strip();
-
             } else {
-                //  System.out.println("There is no Pokemon named: " + url);
                 return null;
             }
-
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return null;
         }
         return body;
     }
+
+     /**
+
+      Uses the data from PokeAPI to search for a page and name of an image
+      that exists on WikipediaAPI.
+
+       Dr. Coterell showed us the majority of this code in class.
+
+       @param url2 is the url that the user tries to retrieve from WikipediaAPI.
+       @return the body received from WikipediaAPI
+       @throw an IOException if the body is bad
+
+    */
 
     public static String fetchImage(String url2) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url2))
                     .build();
-
             HttpResponse<String> response
                 = HTTP_WIKI.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() == 200) {
-                //  return response.body();
                 body = response.body().strip();
 
             } else {
                 System.out.println("Failed to fetch image: " + wikiType);
                 return null;
             }
-
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return null;
@@ -319,24 +253,32 @@ Stops the JavaFX.
         return body;
     }
 
-     public static String fetchImagev2(String url3) {
+     /**
+
+    Uses the name of image receieved from Wikipedia API to further look
+    into WikipediaAPI and find the actual url of the image so it can
+    be shown in the app.
+
+       Dr. Coterell showed us the majority of this code in class.
+
+       @param url3 is the url that the user tries to retrieve from WikipediaAPI.
+       @return the body received from WikipediaAPI
+       @throw an IOException if the body is bad
+
+    */
+
+    public static String fetchImagev2(String url3) {
         try {
-
             HttpRequest request3 = HttpRequest.newBuilder()
-
                 .uri(URI.create(url3))
                     .build();
-
             HttpResponse<String> response3
                 = HTTP_WIKI2.send(request3, HttpResponse.BodyHandlers.ofString());
 
             if (response3.statusCode() == 200) {
-                //  return response.body();
                 body = response3.body().strip();
 
             } else {
-                //  System.out.println("There is no Pokemon named: " + url);
-
                 return null;
             }
 
@@ -348,49 +290,78 @@ Stops the JavaFX.
         return body;
     }
 
+    /**
+       Uses the name of the first image that appears on the Wikipedia page and
+       formats it into a new searchable url.
+
+       @param term2 is the term used for searching.
+       @return url2 is the new url used for searching after this method concludes.
+     */
+
     public String downloadImage(String term2) {
         String url2 = "https://en.wikipedia.org/w/api.php?action=query&prop=images" +
-            "&titles=" + wikiType + "&format=json";
+            "&titles=" + wikiType + "&format=json"; // creates the new url
+
         return url2;
 
     }
+
+    /**
+       The method for fetching the name of the first image and returning
+       the data as a json.
+
+       @param term2 is the term the user inputted to search.
+       @return wiki is the response from Wikipedia
+     */
+
     public WikipediaData fetchWiki(String term2) {
         String url2 = downloadImage(term2); // Makes the URL for query
         String json = fetchImage(url2); // Fetch JSON data from the url
         WikipediaData wiki =
             GSON_WIKI.<WikipediaData>fromJson(json, WikipediaData.class);
-        // ^^^^ Converts the JSON data into an ItunesReponse using GSON
-        return wiki; // returns the reponse
-    } // ItunesResponse
+        // ^^^^ Converts the JSON data into WikipediaData using GSON
+        return wiki; // returns the response
+    }
 
 
+    /**
+       Uses the image name retrieved from Wikipedia to search wikipedia
+       with an encoded version to retrieve the actual url of the
+       image so it can be shown.
 
+       @param wikiImageFinal is the name of the image.
+       @return url3 is the url of the page with the url of the image.
+     */
     public static String downloadImagev2(String wikiImageFinal) {
         String encodedWikiImageFinal = URLEncoder.encode(wikiImageFinal, StandardCharsets.UTF_8);
         String url3 = "https://www.mediawiki.org/w/api.php?";
-        url3 += "action=query&format=json" +
+        url3 += "action=query&format=json" + // encodes and puts it into a new url
             "&prop=imageinfo&titles=" + encodedWikiImageFinal +
             "&prop=imageinfo&iilimit=50&iiend=2007-12-31T23:59:59Z&iiprop=timestamp" +
             "&iiprop=user&iiprop=url";
 
         return url3;
+    }
 
+    /**
+       This method is for fetching the url of the image and returning
+       the data as a json.
 
-    } // getItunesUrl
-
-
+       @param wikiImageFinal is the name of the image retrieved from WikipediaAPI
+       @return wiki2 is response from Wikipedia.
+     */
     public static ImageWikipediaData fetchWikiv2(String wikiImageFinal) {
         String url3 = downloadImagev2(wikiImageFinal); // Makes the URL for query
         String json3 = fetchImagev2(url3); // Fetch JSON data from the url
         ImageWikipediaData wiki2 =
             GSON_WIKI2.<ImageWikipediaData>fromJson(json3, ImageWikipediaData.class);
-        // ^^^^ Converts the JSON data into an ItunesReponse using GSON
-        return wiki2; // returns the reponse
-    } // ItunesResponse
+        // ^^^^ Converts the JSON data into an ImageWikipediaData using GSON
+        return wiki2; // returns the response
+    }
 
 
 /**
-   Makes the string from various inputs to be input into the search as a url.
+   Makes the string from the user input into the search as a url.
 
    @param term Is the term the user inputs into the search bar.
    @return userUrl is the complete url returned from the user inputs.
@@ -398,72 +369,50 @@ Stops the JavaFX.
 
     public static String getPokemonUrl(String term) {
         term = term.toLowerCase();
-        String spacedTerm = term.replace(" ", "-");
+        String spacedTerm = term.replace(" ", "-"); // replaces spaces for search
         String userUrl = "https://pokeapi.co/api/v2/pokemon/" + spacedTerm;
+
         return userUrl;
-    } // getItunesUrl
-
-    /**
-      Method for producing and showing alerts when an Alert
-      needs to be shown.
-
-      This is mostly taken from hw 7. I edited it a bit though
-      because I couldn't figure out how to get it to work
-      right.
-
-      @param title is the title of the Alert
-      @param message is the message displayed for the Alert
-
-     */
-
-    public static void showAlert(String title, String message) {
-        Platform.runLater(() -> {
-            Alert alert = new Alert(AlertType.WARNING); // Creates new aler
-            alert.setTitle("ERROR"); // Sets the title
-            alert.setHeaderText("ERROR"); // Sets the header
-            alert.setContentText(message); // Gets the message I manually input
-            alert.setResizable(true); // Sets the resizable to true
-            alert.showAndWait(); // Shows and waits for the user to click
-        });
-    } // showAlert
+    }
 
     /**
       The method that occurs when the user clicks the get image button.
-      It calls the listMaker method which does more of the actions.
+      It calls the many methods which does more of the actions.
      */
 
-    private void getImageButtonAction() {
-        getImageButton.setOnAction(event -> {
+    private void pokeButton() {
+        pokePicker.setOnAction(event -> {
             try {
                 convertList.clear();
-                finalImages.clear();
+                finalImages.clear(); // Clears all the lists
                 wikiList.clear();
-                newManyImages.getChildren().clear(); // Clear new many images
                 userInput = url.getText(); // get the user input
-                dropDownThing = dropDown.getValue(); // get the combo box data
                 PokemonDataTypeHigh response = fetchPokemon(userInput);
-                if (response == null) {
+                if (response == null) { // if the user inputs a pokemon that doesn't exist
                     changeText.setText("There is no Pokemon named: " + userInput);
                 } else {
-                    List<PokemonTypeData> pokemonTypes = response.getTypes();
-                    if (pokemonTypes == null) {
+                    List<PokemonTypeData> pokemonTypes = response.getTypes(); // gets the types of
+                    // the pokemon
+                    if (pokemonTypes == null) { // if the user inputs nothing
                         changeText.setText("You forgot to input a Pokemon name!");
                     } else {
                         for (PokemonTypeData typeData : pokemonTypes) {
-                            PokemonType type = typeData.getType();
+                            PokemonType type = typeData.getType();  // gets the types of the pokemon
+                            // and adds them to a list
                             convertList.add(type.getName());
                         }
-                        wikiType = convertList.get(0);
+                        wikiType = convertList.get(0); // gets the main type of the pokemon
                         for (int i = 0; i < convertList.size(); i++) {
                             if (i == 1) {
                                 printableList = printableList + " and " +  convertList.get(i);
-                                tempCount = 2;
+                                tempCount = 2; // if there are one or two types print something else
                             } else {
                                 printableList = convertList.get(i);
                                 tempCount = 0;
                             }
                         }
-                        if (tempCount == 2) {
+                        if (tempCount == 2) { // if there are one or two types print something
+                            // different for each scenario
                             changeText.setText("Your Pokemon is " + userInput
                                 + " and it's types are " + printableList);
                         } else {
@@ -471,10 +420,14 @@ Stops the JavaFX.
                                 + " and it's type is " + printableList);
                         }
                     }
-                    bottomTextChange();
-                    bottomTextChange2();
-                    wikiTypeChange();
-                    fetchImageEnd();
+                    if (wikiType == null) {
+                        wikiType = null; // if the user inputted nothing
+                    } else { // otherwise call these helper methods
+                        bottomTextChange();
+                        bottomTextChange2();
+                        wikiTypeChange();
+                        fetchImageEnd();
+                    }
                 }
 
             } catch (IllegalArgumentException e) { // Sees if the images fail
@@ -483,54 +436,65 @@ Stops the JavaFX.
                 e.printStackTrace(); // Prints the stack trace
             }
         });
-    } // getImageButtonAction
+    }
 
+    /**
+       Fetches the actual and shows the image using many
+       different helper methods.
+     */
     public void fetchImageEnd() {
-        WikipediaData response2 = fetchWiki(wikiType);
-        WikipediaQuery imageTest = response2.getQuery();
+
+        WikipediaData response2 = fetchWiki(wikiType); // calls fetchWiki
+        WikipediaQuery imageTest = response2.getQuery(); // gets the query of the response
         for (String key : imageTest.getPages().keySet()) {
             WikipediaPages page = imageTest.getPages().get(key);
-            List<WikipediaImages> images = page.getImages();
+            List<WikipediaImages> images = page.getImages(); // creates a list of the images
             for (WikipediaImages image : images) {
-                wikiList.add(image.getTitle());
+                wikiList.add(image.getTitle()); //gets the titles of the images
             }
         }
-        wikiImageFinal = wikiList.get(0);
-        ImageWikipediaData response3 = fetchWikiv2(wikiImageFinal);
-        ImageWikipediaQuery imageTestv2 = response3.getQuery();
+        wikiImageFinal = wikiList.get(0); // gets the first image on the page
+        ImageWikipediaData response3 = fetchWikiv2(wikiImageFinal); // calls fetchwikiv2
+        // with the newfound image title
+        ImageWikipediaQuery imageTestv2 = response3.getQuery(); // gets query
         for (String key2 : imageTestv2.getPages().keySet()) {
             ImageWikipediaPages page2 = imageTestv2.getPages().get(key2);
-            List<ImageWikipediaImages> imagev2 = page2.getImageInfo();
-
+            List<ImageWikipediaImages> imagev2 = page2.getImageInfo(); // gets the image info
             for (ImageWikipediaImages imagez : imagev2) {
-                finalImages.add(imagez.getUrl());
+                finalImages.add(imagez.getUrl()); // adds the urls of the final image
             }
             TilePane finalImageThankJesus = new TilePane();
+            finalImageThankJesus.setPrefRows(1); //creates new tile pane for the image
             finalImageThankJesus.setPrefRows(1);
-            finalImageThankJesus.setPrefRows(1);
-            String finalImagez = finalImages.get(0);
+            String finalImagez = finalImages.get(0); //gets the first url
             Image finalImageImage = new Image(finalImagez);
             ImageView imageView = new ImageView(finalImageImage);
             imageView.setFitHeight(320);
             imageView.setFitWidth(375);
             botHBox.getChildren().clear();
-            finalImageThankJesus.getChildren().add(imageView);
+            finalImageThankJesus.getChildren().add(imageView); // adds the image to the scene
             botHBox.getChildren().add(finalImageThankJesus);
         }
     }
 
+    /**
+       Change the bottom text to show the user a little exercpt about where to find
+       their pokemon.
+     */
+
     public void bottomTextChange() {
+
         if (wikiType.equalsIgnoreCase("flying")) {
             botTextEnd.setText("Since " + userInput + "'s main type is flying, you would probably" +
                 " find \nit in the sky with some airplanes!");
         }
         if (wikiType.equalsIgnoreCase("fire")) {
             botTextEnd.setText("Since " + userInput + "'s main type is fire, you would probably" +
-                " find \nit at/near a volcano!");
+                " find \nit at a volcano!");
         }
         if (wikiType.equalsIgnoreCase("bug")) {
             botTextEnd.setText("Since " + userInput + "'s main type is bug, you would probably" +
-                " find \nit on/inside some plants!");
+                " find \nit on some plants!");
         }
         if (wikiType.equalsIgnoreCase("dark")) {
             botTextEnd.setText("Since " + userInput + "'s main type is dark, you would probably" +
@@ -558,6 +522,11 @@ Stops the JavaFX.
         }
     }
 
+    /**
+       The previous method was too long so this covers the rest of the types and
+       shows the user a little excerpt about them.
+     */
+
     public void bottomTextChange2() {
         if (wikiType.equalsIgnoreCase("grass")) {
             botTextEnd.setText("Since " + userInput + "'s main type is grass, you would probably" +
@@ -569,7 +538,7 @@ Stops the JavaFX.
         }
         if (wikiType.equalsIgnoreCase("ice")) {
             botTextEnd.setText("Since " + userInput + "'s main type is ice, you would probably" +
-                " find \nit in on/around some glaciers!");
+                " find \nit in around some glaciers!");
         }
         if (wikiType.equalsIgnoreCase("normal")) {
             botTextEnd.setText("Since " + userInput + "'s main type is normal, you would probably" +
@@ -577,7 +546,7 @@ Stops the JavaFX.
         }
         if (wikiType.equalsIgnoreCase("poison")) {
             botTextEnd.setText("Since " + userInput + "'s main type is poison, you would probably" +
-                " find \nit at/around a landfill!");
+                " find \nit at a landfill!");
         }
         if (wikiType.equalsIgnoreCase("psychic")) {
             botTextEnd.setText("Since " + userInput + "'s main type is psychic, you would" +
@@ -598,6 +567,11 @@ Stops the JavaFX.
 
     }
 
+    /**
+       Most of the words are far to vague for Wikipedia to understand them so I
+       change the words to more specific terms that Wikipedia can actually search
+       for.
+     */
 
     public void wikiTypeChange() {
         if (wikiType.equalsIgnoreCase("flying")) {
@@ -668,15 +642,10 @@ Stops the JavaFX.
         throws IOException {
         String url = getPokemonUrl(term); // Makes the URL for query
         String json = fetchString(url); // Fetch JSON data from the url
-
-        //  System.out.println(json);
         PokemonDataTypeHigh pkmn =
             GSON.<PokemonDataTypeHigh>fromJson(json, PokemonDataTypeHigh.class);
-        // ^^^^ Converts the JSON data into an ItunesReponse using GSON
+        // ^^^^ Converts the JSON data into a PokemonDataTypeHigh using GSON
         return pkmn; // returns the reponse
-    } // ItunesResponse
+    }
 
-
-
-
-} // GalleryApp
+}

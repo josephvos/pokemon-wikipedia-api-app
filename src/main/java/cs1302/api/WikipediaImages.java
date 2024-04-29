@@ -8,41 +8,46 @@ import cs1302.api.PokemonDataTypeHigh;
 
 
 /**
- * Represents a result in a response from the iTunes Search API. This is
- * used by Gson to create an object from the JSON response body. This class
- * is provided with project's starter code, and the instance variables are
- * intentionally set to package private visibility.
- * @see <a href="https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/UnderstandingSearchResults.html#//apple_ref/doc/uid/TP40017632-CH8-SW1">Understanding Search Results</a>
+   Contains the direct data about the images including the actual
+   name space and the title of the images.
  */
 public class WikipediaImages {
 
-    //  String title;
-    // List<WikipediaData> images;
-    //  int ns;
-/*
-    private Query query;
-    public Query getQuery() {
-        return query;
 
-    }
-    public void setQuery(Query quer) {
-        this.query = query;
-    }
-*/
     private int ns;
     private String title;
+
+    /**
+       Gets the actual name space of the images.
+       @return ns the name space
+    */
 
     public int getNs() {
         return ns;
     }
 
+    /**
+       Sets the actual name space of the images.
+       @param ns the name space of the images.
+    */
+
     public void setNs(int ns) {
         this.ns = ns;
     }
 
+    /**
+       Gets the actual title of the images.
+       @return title the actual title of the images.
+    */
+
     public String getTitle() {
         return title;
     }
+
+    /**
+       Sets the actual title of the images.
+       @param title the actual title of the images.
+    */
 
     public void setTitle(String title) {
         this.title = title;
@@ -51,50 +56,8 @@ public class WikipediaImages {
 
 
 
-    //   public String getTitle() {
-    //      return title;
-    //   }
-    //   public void setTitle(String title) {
-        //        this.title = title;
-          //   return title;
-    //  }
-
-/*
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUrl() {
-        return url;
-
-    }
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-   @Override
-       public String toString() {
-        //  String result = "toString PType.java: ";
-       //  for (PokemonType type : types) {
-       //  result += types.getName();
-         String result = name;
-         //  }
-          return result;
-          //  return name;
-       }
-*/
-
-
-
-    //  public List<PokemonType> getTypes() {
-    //      return types;
-    //   }
 
 
 
 
-} // ItunesResult
+}

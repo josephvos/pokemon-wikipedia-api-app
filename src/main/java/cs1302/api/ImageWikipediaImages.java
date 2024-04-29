@@ -7,116 +7,106 @@ import cs1302.api.PokemonDataTypeHigh;
 
 
 /**
- * Represents a result in a response from the iTunes Search API. This is
- * used by Gson to create an object from the JSON response body. This class
- * is provided with project's starter code, and the instance variables are
- * intentionally set to package private visibility.
- * @see <a href="https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/UnderstandingSearchResults.html#//apple_ref/doc/uid/TP40017632-CH8-SW1">Understanding Search Results</a>
+   This class is the deepsest class inside the ImageWikipedia classes. It has the
+   direct, specific information about the particular image and provides the needed
+   url to show the image on the screen.
  */
+
 public class ImageWikipediaImages {
 
-    //  String title;
-    // List<WikipediaData> images;
-    //  int ns;
-/*
-    private Query query;
-    public Query getQuery() {
-        return query;
 
-    }
-    public void setQuery(Query quer) {
-        this.query = query;
-    }
-*/
     private String timestamp;
     private String descriptionurl;
     private String user;
     private String url;
     private String descriptionshorturl;
 
+    /**
+       Gets the timestamp of the image retrieval.
+       @return timestamp the timestamp of the image retrieval.
+    */
+
     public String getTimestamp() {
         return timestamp;
     }
+
+    /**
+       Sets the timestamp of the image retrieval.
+       @param timestamp is the timestamp of the image retrieval.
+    */
 
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
+    /**
+       Gets the description of the image url.
+       @return descriptionurl the description of the image url.
+    */
+
     public String getDescriptionUrl() {
         return descriptionurl;
     }
+
+    /**
+       Sets the description url.
+       @param descriptionurl is the description of the image url.
+    */
 
     public void setDescriptionUrl(String descriptionurl) {
         this.descriptionurl = descriptionurl;
     }
 
+    /**
+       Gets the user of the image retriever.
+       @return user the name of the image retriever.
+    */
+
     public String getUser() {
         return user;
     }
+
+    /**
+       Sets the name of the image retriever.
+       @param user the name of the image retriever.
+    */
+
     public void setUser(String user) {
         this.user = user;
     }
 
+    /**
+       Gets the necessary url to show the image.
+       @return url the url to show the image.
+    */
+
     public String getUrl() {
         return url;
     }
+    /**
+       Sets the url to show the image.
+       @param url the url to show the image.
+    */
+
     public void setUrl(String url) {
         this.url = url;
     }
+    /**
+       Gets a shorter version of the url.
+       @return descriptionshorturl a shorter version of the url.
+    */
+
     public String getDescriptionShortUrl() {
         return descriptionshorturl;
     }
+    /**
+     Sets a shorter description of the url.
+     @param descriptionshorturl is a shorter version of the url.
+    */
+
     public void setShortDescriptionUrl(String descriptionshorturl) {
         this.descriptionshorturl = descriptionshorturl;
     }
 
 
-
-
-    //   public String getTitle() {
-    //      return title;
-    //   }
-    //   public void setTitle(String title) {
-        //        this.title = title;
-          //   return title;
-    //  }
-
-/*
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUrl() {
-        return url;
-
-    }
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-   @Override
-       public String toString() {
-        //  String result = "toString PType.java: ";
-       //  for (PokemonType type : types) {
-       //  result += types.getName();
-         String result = name;
-         //  }
-          return result;
-          //  return name;
-       }
-*/
-
-
-
-    //  public List<PokemonType> getTypes() {
-    //      return types;
-    //   }
-
-
-
-
-} // ItunesResult
+}
