@@ -6,6 +6,7 @@ import javafx.application.Platform; // An exorbitant amount of import statements
 import javafx.scene.layout.HBox;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.layout.Region;
 import com.google.gson.Gson;
 import cs1302.api.WikipediaData;
 import com.google.gson.GsonBuilder;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.net.http.HttpRequest;
 import java.net.URI;
 import java.net.http.HttpResponse;
+import javafx.geometry.Insets;
 import java.net.http.HttpResponse.BodyHandlers;
 import cs1302.api.ApiDriver;
 import java.util.List;
@@ -113,10 +115,14 @@ public class ApiApp extends Application {
         this.stage = null;
         this.scene = null; // Initializes a bunch of stuff.
         this.root = new HBox(15); // Not really hard to understand what these all do.
+        root.setAlignment(javafx.geometry.Pos.CENTER);
+        root.setPadding(new Insets(5, 5, 5, 5));
         bigBox = new VBox();
         superBot = new HBox();
+        superBot.setPadding(new Insets(5, 5, 5, 5));
         imgView = new ImageView();
         textBot = new HBox();
+        textBot.setPadding(new Insets(5, 5, 5, 5));
         url = new TextField("Charmander");
         botHBox = new HBox();
         bot2Hbox = new HBox(3);
@@ -129,7 +135,7 @@ public class ApiApp extends Application {
         changeText.setFont(Font.font("TimesRoman", 10));
         bottomChangeText.setText("Created By Joey Vos Using PokeAPI & WikipediaAPI");
         bottomChangeText.setFont(Font.font("TimesRoman", 10));
-        botTextEnd.setFont(Font.font("TimesRoman", 10));
+        botTextEnd.setFont(Font.font("TimesRoman", 12));
 
     }
     /** {@inheritDoc}
@@ -167,7 +173,7 @@ public class ApiApp extends Application {
     @Override
     public void start(Stage stage) {
         this.stage = stage; // sets the stage along with sizing
-        this.scene = new Scene(bigBox, 360, 392); // Had problems with sizing so manually input it
+        this.scene = new Scene(bigBox, 400, 425); // Had problems with sizing so manually input it
         this.stage.setOnCloseRequest(event -> Platform.exit());
         this.stage.setTitle("PokemonFinder!");
         this.stage.setScene(this.scene);
@@ -427,6 +433,7 @@ Stops the JavaFX.
                         bottomTextChange2();
                         wikiTypeChange();
                         fetchImageEnd();
+
                     }
                 }
 
@@ -435,7 +442,9 @@ Stops the JavaFX.
             }  catch (IOException e) {
                 e.printStackTrace(); // Prints the stack trace
             }
+
         });
+
     }
 
     /**
@@ -470,7 +479,7 @@ Stops the JavaFX.
             Image finalImageImage = new Image(finalImagez);
             ImageView imageView = new ImageView(finalImageImage);
             imageView.setFitHeight(320);
-            imageView.setFitWidth(375);
+            imageView.setFitWidth(410);
             botHBox.getChildren().clear();
             finalImageThankJesus.getChildren().add(imageView); // adds the image to the scene
             botHBox.getChildren().add(finalImageThankJesus);

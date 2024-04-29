@@ -27,6 +27,9 @@ TODO WRITE / REPLACE
 ```
 https://pokeapi.co/api/v2/pokemon/charmander
 ```
+>   This link is an example of what a url would look like if the user inputted
+    the Pokemon name "charmander". It just adds the user input to the end of the
+    url and searches the PokeAPI using that.
 
 ### WikipediaAPI
 
@@ -39,7 +42,9 @@ https://www.mediawiki.org/w/api.php?action=query&format=json&prop=imageinfo&titl
 
 > The first url for WikipediaAPI is for retrieving the title of the image and then
     the second url uses the title of the image to find the actual url of the image
-    so it can be show in the project.
+    so it can be show in the project. I have some methods that will convert vague terms
+    like "fire" into a more specific term like "lava", that way Wikipedia will
+    be able to search images using that term.
 
 ## Part 2: New
 
